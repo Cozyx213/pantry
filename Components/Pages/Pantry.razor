@@ -1,0 +1,91 @@
+@page "/pantry"
+@rendermode InteractiveServer
+
+<PageTitle>Pantry</PageTitle>
+
+<h1>Pantry</h1>
+
+<EditForm class="mb-8 max-w-sm" Model="model" OnValidSubmit="AddItem" FormName="add-item">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-4">
+        <label class="mb-1 block text-sm font-medium">Item name</label>
+        <InputText class="input" @bind-Value="model.Name" />
+    </div>
+
+    <div class="mb-4">
+        <label class="mb-1 block text-sm font-medium">Quantity</label>
+        <InputNumber class="input" @bind-Value="model.Quantity" />
+    </div>
+
+    <div class="mb-4">
+        <label class="mb-1 block text-sm font-medium">Expiry date</label>
+        <InputDate class="input" @bind-Value="model.Expiry" />
+    </div>
+
+    <button type="submit" class="btn">Add item</button>
+</EditForm>
+
+@if (items.Count == 0)
+{
+    <p class="text-gray-500">Your pantry is empty. Add your first item above.</p>
+}
+else
+{
+    <table class="w-full max-w-3xl text-left [&_td]:border-b [&_td]:border-gray-200 [&_td]:py-2 [&_th]:border-b-2 [&_th]:border-gray-300 [&_th]:py-2">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Qty</th>
+                <th>Expires</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in items)
+            {
+                <tr class="@RowClass(item)">
+                    <td>@item.Name</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.Expiry.ToString("yyyy-MM-dd")</td>
+                    <td class="text-right">
+                        <button class="text-red-600 hover:underline" @onclick="() => RemoveItem(item)">Remove</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private ItemModel model = new();
+    private List<ItemModel> items = new();
+
+    private void AddItem()
+    {
+        items.Add(model);
+        model = new();
+    }
+
+    private void RemoveItem(ItemModel item) => items.Remove(item);
+
+    private static string RowClass(ItemModel item)
+    {
+        var daysLeft = (item.Expiry.Date - DateTime.Today).Days;
+        if (daysLeft < 0) return "bg-red-100";
+        if (daysLeft <= 3) return "bg-yellow-100";
+        return "";
+    }
+
+    private class ItemModel
+    {
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "Item name is required.")]
+        public string Name { get; set; } = "";
+
+        [System.ComponentModel.DataAnnotations.Range(1, 1000, ErrorMessage = "Quantity must be at least 1.")]
+        public int Quantity { get; set; } = 1;
+
+        public DateTime Expiry { get; set; } = DateTime.Today.AddDays(7);
+    }
+}
