@@ -3,3 +3,8 @@ obj/
 .vs/
 *.user
 *.suo
+wwwroot/tailwind.css
+node_modules/
+package-lock.json
+node_modules/
+wwwroot/tailwind.css

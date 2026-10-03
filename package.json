@@ -1,0 +1,26 @@
+{
+  "name": "pantry",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "css:build": "tailwindcss -i Styles/app.css -o wwwroot/tailwind.css --minify",
+    "css:watch": "tailwindcss -i Styles/app.css -o wwwroot/tailwind.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cozyx213/pantry.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Cozyx213/pantry/issues"
+  },
+  "homepage": "https://github.com/Cozyx213/pantry#readme",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "tailwindcss": "^4.3.3"
+  }
+}
