@@ -1,0 +1,57 @@
+@page "/register"
+@rendermode InteractiveServer
+
+<PageTitle>Register</PageTitle>
+
+<h1>Register</h1>
+
+<EditForm Model="model" OnValidSubmit="HandleRegister" FormName="register">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label class="form-label">Username</label>
+        <InputText class="form-control" @bind-Value="model.Username" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Password</label>
+        <InputText type="password" class="form-control" @bind-Value="model.Password" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Confirm Password</label>
+        <InputText type="password" class="form-control" @bind-Value="model.PasswordConfirm" />
+    </div>
+    <button type="submit" class="btn btn-primary">Register</button>
+</EditForm>
+
+@if (error != null)
+{
+    <p class="text-danger mt-3">@error</p>
+}
+    
+@code {
+    private RegisterModel model = new();
+    private string? error;
+
+    private void HandleRegister()
+    {
+        // TODO: check credentials against user store
+        if (model.Username == "admin" && model.Password == "password" &&model.PasswordConfirm == "password"  )
+            error = null; // success: redirect or set auth state here
+        else if (model.Password != model.PasswordConfirm)
+            error = "Password Mismatch";
+        else
+            error = "Invalid username or password.";
+    }
+
+    private class RegisterModel
+    {
+        [System.ComponentModel.DataAnnotations.Required]
+        public string Username { get; set; } = "";
+
+        [System.ComponentModel.DataAnnotations.Required]
+        public string Password { get; set; } = "";
+        public string PasswordConfirm { get; set; } = "";
+    }
+}

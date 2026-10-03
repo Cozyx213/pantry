@@ -1,0 +1,51 @@
+@page "/login"
+@rendermode InteractiveServer
+
+<PageTitle>Login</PageTitle>
+
+<h1>Login</h1>
+
+<EditForm Model="model" OnValidSubmit="HandleLogin" FormName="login">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label class="form-label">Username</label>
+        <InputText class="form-control" @bind-Value="model.Username" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Password</label>
+        <InputText type="password" class="form-control" @bind-Value="model.Password" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Log in</button>
+</EditForm>
+
+@if (error != null)
+{
+    <p class="text-danger mt-3">@error</p>
+}
+
+@code {
+    private LoginModel model = new();
+    private string? error;
+
+    private void HandleLogin()
+    {
+        // TODO: check credentials against your user store
+        if (model.Username == "admin" && model.Password == "password")
+            error = null; // success: redirect or set auth state here
+        else
+            error = "Invalid username or password.";
+    }
+
+    private class LoginModel
+    {
+        [System.ComponentModel.DataAnnotations.Required]
+        public string Username { get; set; } = "";
+
+        [System.ComponentModel.DataAnnotations.Required]
+        public string Password { get; set; } = "";
+    }
+}
